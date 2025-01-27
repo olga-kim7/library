@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a033658d-e5ce-40cd-b751-1a865439d1c2" name="Changes" comment="add new app books_servise" />
+    <list default="true" id="a033658d-e5ce-40cd-b751-1a865439d1c2" name="Changes" comment="add new app users_service">
+      <change beforePath="$PROJECT_DIR$/Library/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/Library/settings.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -25,7 +27,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "develop",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -51,7 +53,7 @@
       <option name="presentableId" value="Default" />
       <updated>1738009559646</updated>
       <workItem from="1738009560639" duration="1000" />
-      <workItem from="1738010119569" duration="692000" />
+      <workItem from="1738010119569" duration="1067000" />
     </task>
     <task id="LOCAL-00001" summary="add .gitignore with .idea and venv">
       <option name="closed" value="true" />
@@ -69,7 +71,31 @@
       <option name="project" value="LOCAL" />
       <updated>1738010602715</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="rename app books_service">
+      <option name="closed" value="true" />
+      <created>1738011113649</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1738011113649</updated>
+    </task>
+    <task id="LOCAL-00004" summary="add new app borrowings_service">
+      <option name="closed" value="true" />
+      <created>1738011140056</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1738011140056</updated>
+    </task>
+    <task id="LOCAL-00005" summary="add new app users_service">
+      <option name="closed" value="true" />
+      <created>1738011153830</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1738011153830</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -78,6 +104,9 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="add .gitignore with .idea and venv" />
     <MESSAGE value="add new app books_servise" />
-    <option name="LAST_COMMIT_MESSAGE" value="add new app books_servise" />
+    <MESSAGE value="rename app books_service" />
+    <MESSAGE value="add new app borrowings_service" />
+    <MESSAGE value="add new app users_service" />
+    <option name="LAST_COMMIT_MESSAGE" value="add new app users_service" />
   </component>
 </project>
