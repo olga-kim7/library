@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a033658d-e5ce-40cd-b751-1a865439d1c2" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Library/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Library/asgi.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Library/settings.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Library/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Library/wsgi.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/manage.py" afterDir="false" />
-    </list>
+    <list default="true" id="a033658d-e5ce-40cd-b751-1a865439d1c2" name="Changes" comment="add .gitignore with .idea and venv" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -17,9 +10,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 3
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
   <component name="ProjectId" id="2sE8pu0E2nMpjUJ8jpds7TaISY5" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -30,6 +23,10 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
   }
@@ -51,7 +48,24 @@
       <option name="presentableId" value="Default" />
       <updated>1738009559646</updated>
       <workItem from="1738009560639" duration="1000" />
+      <workItem from="1738010119569" duration="353000" />
     </task>
+    <task id="LOCAL-00001" summary="add .gitignore with .idea and venv">
+      <option name="closed" value="true" />
+      <created>1738010288415</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1738010288415</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="add .gitignore with .idea and venv" />
+    <option name="LAST_COMMIT_MESSAGE" value="add .gitignore with .idea and venv" />
   </component>
 </project>
