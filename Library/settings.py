@@ -9,8 +9,9 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+from datetime import timedelta
 from pathlib import Path
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+DOMAIN_NAME = 'http://127.0.0.1:8000//'
 # Application definition
 
 INSTALLED_APPS = [
@@ -37,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework.authtoken',
+    'drf_spectacular',
     'rest_framework',
     'books_service',
     'borrowings_service',
@@ -105,6 +108,34 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '100/day',
+        'user': '1000/day'
+    },
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+)
+}
+
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Library',
+    'DESCRIPTION': 'Library - Books Service',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
+
+SIMPLE_JWT = {
+   "ACCESS_TOKEN_LIFETIME": timedelta(minutes=3000),
+   "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+   "ROTATE_REFRESH_TOKENS": True
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
@@ -129,3 +160,22 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users_service.User'
+
+
+# celery
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+
+# Stripe
+
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51QmdmTP2YJRNJCWKHVU1EEeiPDcjnGzek2Ypi3UfXDGuMDOKqvTsyXpaJOvCvCUU3lCALBOZlFf8EabgyxnXsL4B00UnG7nAqB'
+STRIPE_SECRET_KEY = 'sk_test_51QmdmTP2YJRNJCWKwp68SXjzWL0mvCUVZdM7x5juMWAJJGnNcFZsB9n4ikBfHIU8EBWGhkAyjPYQGvcYJLMkA0p800rmoyM2aB'
+STRIPE_WEBHOOK_SECRET = 'whsec_73bbe35299fdbe6f309ae9c3897cb3337f2d3cc01cb7f56632b104735883c29e'
+
+# Telegram
+
+TELEGRAM_BOT_TOKEN = "8002650392:AAHqZNJJlohRkhfDJLTZtmXoew5eHEDnAec"
+TELEGRAM_CHAT_ID = 544408238
