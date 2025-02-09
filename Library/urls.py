@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import path, include
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 
+from borrowings_service.views import my_webhook_view
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/books/', include("books_service.urls"), name='books_service'),
@@ -27,5 +29,7 @@ urlpatterns = [
     # Optional UI:
     path('api/schema/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger'),
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    path("webhook/", my_webhook_view, name="webhook"),
+
 ]
 
