@@ -6,7 +6,14 @@ from django.utils.translation import gettext as _
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ("id", "email", "first_name", "last_name", "password", "is_staff",)
+        fields = (
+            "id",
+            "email",
+            "first_name",
+            "last_name",
+            "password",
+            "is_staff",
+        )
         read_only_fields = ("id", "is_staff")
         extra_kwargs = {
             "password": {
@@ -15,7 +22,6 @@ class UserSerializer(serializers.ModelSerializer):
                 "style": {"input_type": "password"},
                 "label": _("Password"),
             }
-
         }
 
     def create(self, validated_data):
@@ -24,7 +30,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         """update user with encrypted password"""
-        password = validated_data.pop('password', None)
+        password = validated_data.pop("password", None)
         user = super().update(instance, validated_data)
 
         if password:
@@ -37,17 +43,19 @@ class AuthTokenSerializer(serializers.Serializer):
     email = serializers.CharField(label=_("Email"), write_only=True)
     password = serializers.CharField(
         label=_("Password"),
-        style={'input_type': 'password'},
+        style={"input_type": "password"},
         trim_whitespace=False,
         write_only=True,
     )
     token = serializers.CharField(label=_("Token"), read_only=True)
 
     def validate(self, attrs):
-        email = attrs.get('email')
-        password = attrs.get('password')
+        email = attrs.get("email")
+        password = attrs.get("password")
 
         if email and password:
             user = authenticate(
-                request=self.context.get('request'), email=email, password=password
+                request=self.context.get("request"),
+                email=email,
+                password=password
             )

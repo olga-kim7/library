@@ -10,8 +10,7 @@ class BooksServiceTestCase(TestCase):
             author="Test Author",
             cover="Soft",
             inventory=12,
-            daily_fee=10
-
+            daily_fee=10,
         )
-        expected = f'{book.title} - {book.author}'
+        expected = f"{book.title} - {book.author}"
         self.assertEqual(str(book), expected)

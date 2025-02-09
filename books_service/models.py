@@ -2,10 +2,7 @@ from django.db import models
 
 
 class Book(models.Model):
-    COVER_CHOISE = [
-        ('HARD', 'HARD'),
-        ('SOFT', 'SOFT')
-    ]
+    COVER_CHOISE = [("HARD", "HARD"), ("SOFT", "SOFT")]
 
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255)
@@ -14,4 +11,4 @@ class Book(models.Model):
     daily_fee = models.DecimalField(max_digits=6, decimal_places=2, default=0)
 
     def __str__(self):
-        return f'{self.title} - {self.author}'
+        return f"{self.title} - {self.author}"

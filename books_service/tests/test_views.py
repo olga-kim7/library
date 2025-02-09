@@ -11,7 +11,7 @@ BOOK_URL = reverse("books_service:books-list")
 
 
 def detail_url(book_id):
-    return reverse('books_service:books-detail', kwargs={'pk': book_id})
+    return reverse("books_service:books-detail", kwargs={"pk": book_id})
 
 
 def sample_book(**params) -> Book:
@@ -20,7 +20,7 @@ def sample_book(**params) -> Book:
         "author": "Test Author",
         "cover": "SOFT",
         "inventory": 12,
-        "daily_fee": 10
+        "daily_fee": 10,
     }
     defaults.update(params)
     return Book.objects.create(**defaults)
@@ -74,7 +74,7 @@ class AuthenticatedBookApiTests(TestCase):
             "author": "Test Author",
             "cover": "SOFT",
             "inventory": 11,
-            "daily_fee": 14
+            "daily_fee": 14,
         }
         response = self.client.post(BOOK_URL, payload)
 
@@ -86,7 +86,7 @@ class AuthenticatedBookApiTests(TestCase):
             "author": "Test Author",
             "cover": "SOFT",
             "inventory": 11,
-            "daily_fee": 16
+            "daily_fee": 16,
         }
         url = detail_url(self.book.pk)
         response = self.client.put(url, payload)
@@ -96,6 +96,7 @@ class AuthenticatedBookApiTests(TestCase):
         url = detail_url(self.book.pk)
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
 
 class AdminBookTests(TestCase):
     def setUp(self):
@@ -114,10 +115,10 @@ class AdminBookTests(TestCase):
             "author": "Test Author",
             "cover": "SOFT",
             "inventory": 11,
-            "daily_fee": 16
+            "daily_fee": 16,
         }
         response = self.client.post(BOOK_URL, payload)
-        book = Book.objects.get(pk=response.data['id'])
+        book = Book.objects.get(pk=response.data["id"])
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         for key in payload:
@@ -129,20 +130,13 @@ class AdminBookTests(TestCase):
             "author": "Test Author",
             "cover": "SOFT",
             "inventory": 11,
-            "daily_fee": 16
+            "daily_fee": 16,
         }
         url = detail_url(self.book.pk)
         response = self.client.put(url, payload)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-
     def test_delete_book_admin(self):
         url = detail_url(self.book.pk)
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-
-
-
-
-
-

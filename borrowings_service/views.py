@@ -1,4 +1,3 @@
-
 from django.conf import settings
 from django.http import JsonResponse
 
@@ -7,13 +6,24 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
 from rest_framework import viewsets, permissions
 import stripe
-from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
+from drf_spectacular.utils import (
+    extend_schema,
+    OpenApiParameter,
+    OpenApiExample
+)
 from rest_framework.generics import get_object_or_404
 
 from borrowings_service.models import Borrowing, Payment
-from borrowings_service.serializers import BorrowingSerializer, BorrowingListSerializer, PaymentSerializer
+from borrowings_service.serializers import (
+    BorrowingSerializer,
+    BorrowingListSerializer,
+    PaymentSerializer,
+)
 
-from borrowings_service.tasks import notify_new_borrowing, notify_successful_payment
+from borrowings_service.tasks import (
+    notify_new_borrowing,
+    notify_successful_payment
+)
 
 
 class BorrowingsViewSet(viewsets.ModelViewSet):
@@ -29,50 +39,51 @@ class BorrowingsViewSet(viewsets.ModelViewSet):
         else:
             return BorrowingSerializer
 
-
     def get_queryset(self):
         queryset = self.queryset
-        if self.action == 'list':
-            return queryset.select_related('user_id', 'book_id')
+        if self.action == "list":
+            return queryset.select_related("user_id", "book_id")
         return queryset
 
     def perform_create(self, serializer):
         borrowing = serializer.save(user_id=self.request.user)
         payment = Payment.objects.create(
-            borrowing_id=borrowing,
-            money_to_pay=borrowing.total_price)
+            borrowing_id=borrowing, money_to_pay=borrowing.total_price
+        )
         create_checkout_session(payment)
         notify_new_borrowing.delay(borrowing.id)
-
 
     @extend_schema(
         parameters=[
             OpenApiParameter(
-                name='is_active',
+                name="is_active",
                 type=str,
-                description='Active borrowings its borrowings where return day is None',
+                description="Active borrowings its "
+                            "borrowings where return day is None",
                 required=False,
                 examples=[
                     OpenApiExample(
-                        'Example 1',
-                        description="Find route with destination 'Gare do Oriente'",
-                        value=True
+                        "Example 1",
+                        description="Find route with destination "
+                                    "'Gare do Oriente'",
+                        value=True,
                     ),
                 ],
             ),
             OpenApiParameter(
-                name='user_id',
+                name="user_id",
                 type=str,
-                description="Find borrowings by specific user. Only for administrators",
+                description="Find borrowings by specific user."
+                            " Only for administrators",
                 required=False,
                 examples=[
                     OpenApiExample(
-                        'Example 1',
+                        "Example 1",
                         description="Find borrowings by specific user",
-                        value=1
+                        value=1,
                     ),
                 ],
-            )
+            ),
         ]
     )
     def list(self, request, *args, **kwargs):
@@ -85,26 +96,12 @@ class PaymentViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 
-
-class CancelView(View):
-    def get(self, request, *args, **kwargs):
-        session_id = request.GET.get('session_id')
-        payment = get_object_or_404(Payment, session_id=session_id)
-        payment.status = "PENDING"
-        payment.save()
-        borrowing = payment.borrowing_id
-
-        return JsonResponse({"message": "Payment cancelled or paused."})
-
-
 def create_checkout_session(payment: Payment) -> str:
     stripe.api_key = settings.STRIPE_SECRET_KEY
 
-
     if not stripe.api_key:
-        raise ValueError(
-            "Stripe secret key " "is not set in environment variables"
-        )
+        raise ValueError("Stripe secret key " "is not set in "
+                         "environment variables")
 
     try:
         borrowing = Borrowing.objects.get(payments=payment)
@@ -128,14 +125,19 @@ def create_checkout_session(payment: Payment) -> str:
         checkout_session = stripe.checkout.Session.create(
             line_items=line_items,
             mode="payment",
-            success_url=f"{settings.DOMAIN_NAME}/api/borrowings/success?payment_id={payment.id}",
-            cancel_url=f"{settings.DOMAIN_NAME}/borrowings_service/cancel?session_id={payment.session_id}",
+            success_url=f"{settings.DOMAIN_NAME}/"
+                        f"api/borrowings/"
+                        f"success?payment_id={payment.id}",
+            cancel_url=f"{settings.DOMAIN_NAME}/"
+                       f"borrowings_service/"
+                       f"cancel?session_id={payment.session_id}",
             metadata={"payment_pk": str(payment.id)},
         )
 
-        # Проверяем, записались ли данные
-        retrieved_session = stripe.checkout.Session.retrieve(checkout_session.id)
-        print(f"✅ Metadata в checkout.session: {retrieved_session.metadata}")
+        retrieved_session = (
+            stripe.checkout.Session.retrieve(checkout_session.id)
+        )
+        print(f" Metadata в checkout.session: {retrieved_session.metadata}")
 
         payment.session_url = checkout_session.url
         payment.save()
@@ -152,7 +154,11 @@ def my_webhook_view(request):
     endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
 
     try:
-        event = stripe.Webhook.construct_event(payload, sig_header, endpoint_secret)
+        event = stripe.Webhook.construct_event(
+            payload,
+            sig_header,
+            endpoint_secret
+        )
     except ValueError as e:
         return HttpResponse(status=400)
     except stripe.error.SignatureVerificationError as e:
@@ -166,7 +172,9 @@ def my_webhook_view(request):
         if not metadata:
             payment_intent_id = session.get("payment_intent")
             if payment_intent_id:
-                payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
+                payment_intent = stripe.PaymentIntent.retrieve(
+                    payment_intent_id
+                )
                 metadata = payment_intent.metadata
 
         payment_pk = metadata.get("payment_pk")

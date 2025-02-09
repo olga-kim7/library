@@ -108,7 +108,9 @@ class AuthenticatedBorrowingApiTests(TestCase):
             type="Payment",
             borrowing_id=self.borrowing,
         )
-        self.borrowing.actual_return = (timezone.now() + datetime.timedelta(days=1))
+        self.borrowing.actual_return = (
+            timezone.now() + datetime.timedelta(days=1)
+        )
         self.borrowing.save()
         expected_charge = payment.money_to_pay
         self.assertEqual(payment.money_to_pay, expected_charge)
@@ -131,9 +133,3 @@ class AuthenticatedBorrowingApiTests(TestCase):
         url = detail_url(self.borrowing.id)
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-
-
-
-
-
-

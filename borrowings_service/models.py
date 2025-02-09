@@ -14,18 +14,28 @@ class Borrowing(models.Model):
     borrowing_date = models.DateField(auto_now_add=False)
     expected_date = models.DateField()
     actual_return = models.DateField(null=True, blank=True)
-    book_id = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='borrowings')
-    user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='borrowings', null=True, blank=True)
+    book_id = models.ForeignKey(
+        Book, on_delete=models.CASCADE, related_name="borrowings"
+    )
+    user_id = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="borrowings",
+        null=True,
+        blank=True,
+    )
 
     def __str__(self):
         return f"{self.borrowing_date} - {self.actual_return}"
 
     @property
     def total_price(self):
-        end_date = self.actual_return if self.actual_return else self.expected_date
+        end_date = self.actual_return if self.actual_return else (
+            self.expected_date
+        )
         days_borrowed = (end_date - self.borrowing_date).days
-        return days_borrowed * self.book_id.daily_fee if days_borrowed > 0 else 0
-
+        return days_borrowed * self.book_id.daily_fee \
+            if days_borrowed > 0 else 0
 
     def valid_data(self):
         if self.book_id.inventory == 0:
@@ -41,21 +51,21 @@ class Borrowing(models.Model):
 
 
 class Payment(models.Model):
-    STATUS = [
-        ('PENDING', 'PENDING'),
-        ('PAID', 'PAID')
-    ]
-    TYPE = [
-        ('PAYMENT', 'PAYMENT'),
-        ('FINE', 'FINE')
-    ]
+    STATUS = [("PENDING", "PENDING"), ("PAID", "PAID")]
+    TYPE = [("PAYMENT", "PAYMENT"), ("FINE", "FINE")]
 
-    status = models.CharField(max_length=255, choices=STATUS, default='PEC')
-    type = models.CharField(max_length=255, choices=TYPE, default='PC')
-    borrowing_id = models.ForeignKey(Borrowing, on_delete=models.CASCADE, related_name='payments')
+    status = models.CharField(max_length=255, choices=STATUS, default="PEC")
+    type = models.CharField(max_length=255, choices=TYPE, default="PC")
+    borrowing_id = models.ForeignKey(
+        Borrowing, on_delete=models.CASCADE, related_name="payments"
+    )
     session_url = models.URLField(blank=True, null=True)
     session_id = models.CharField(blank=True, null=True, max_length=255)
-    money_to_pay = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    money_to_pay = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0
+    )
 
     def __str__(self):
         return f"payment: {self.status}, {self.type}, {self.borrowing_id}"

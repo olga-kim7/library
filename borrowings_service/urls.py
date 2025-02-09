@@ -1,7 +1,12 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from borrowings_service.views import BorrowingsViewSet, PaymentViewSet, CancelView, my_webhook_view
+from borrowings_service.views import (
+    BorrowingsViewSet,
+    PaymentViewSet,
+    CancelView,
+    my_webhook_view,
+)
 
 router = routers.DefaultRouter()
 router.register("borrowings", BorrowingsViewSet, basename="borrowings")

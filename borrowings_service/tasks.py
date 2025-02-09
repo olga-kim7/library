@@ -12,7 +12,7 @@ from django.conf import settings
 from Library.celery import app
 from borrowings_service.models import Borrowing, Payment
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Library.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Library.settings")
 
 django.setup()
 
@@ -20,12 +20,13 @@ logger = logging.getLogger(__name__)
 
 TELEGRAM_BOT_TOKEN = settings.TELEGRAM_BOT_TOKEN
 TELEGRAM_CHAT_ID = settings.TELEGRAM_CHAT_ID
-TELEGRAM_API_URL = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
+TELEGRAM_API_URL = (f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/"
+                    f"sendMessage")
 
 
 @shared_task
 def send_telegram_message(message: str):
-    """ Надсилає повідомлення у Telegram """
+    """Надсилає повідомлення у Telegram"""
     try:
         response = requests.post(
             TELEGRAM_API_URL,
@@ -53,27 +54,30 @@ def notify_new_borrowing(borrowing_id: int):
         logger.error(f"Borrowing with id {borrowing_id} does not exist.")
 
 
-
-
 @shared_task
 def notify_overdue_borrowings():
-    """ Щоденне сповіщення про прострочені книги """
+    """Щоденне сповіщення про прострочені книги"""
     today = timezone.now().date()
-    overdue_borrowings = Borrowing.objects.filter(expected_date__lt=today, actual_return__isnull=True)
+    overdue_borrowings = Borrowing.objects.filter(
+        expected_date__lt=today, actual_return__isnull=True
+    )
 
     if overdue_borrowings.exists():
         message = "Overdue Borrowings!\n"
         for borrowing in overdue_borrowings:
             days_overdue = (today - borrowing.expected_date).days
-            message += f" {borrowing.book_id.title} - {borrowing.user_id.email} ({days_overdue} days overdue)\n"
+            message += (f" {borrowing.book_id.title} - "
+                        f"{borrowing.user_id.email}"
+                        f"({days_overdue} days overdue)\n")
     else:
         message = "No overdue borrowings today!"
 
     send_telegram_message(message)
 
+
 @shared_task
 def notify_successful_payment(payment_id: int):
-    """ Сповіщення про успішну оплату """
+    """Сповіщення про успішну оплату"""
     try:
         payment = Payment.objects.get(id=payment_id)
         message = (
@@ -86,4 +90,3 @@ def notify_successful_payment(payment_id: int):
         send_telegram_message(message)
     except Payment.DoesNotExist:
         logger.error(f"Payment with id {payment_id} does not exist.")
-

@@ -46,16 +46,24 @@ def sample_borrowing(**params):
 class TestBorrowingsModel(TestCase):
     def test_borrowings_str(self):
         user = User.objects.create(email="test_user@example.com")
-        book = Book.objects.create(title="Test Book", author="Test Author", cover="Soft", inventory=10, daily_fee=5)
+        book = Book.objects.create(
+            title="Test Book",
+            author="Test Author",
+            cover="Soft",
+            inventory=10,
+            daily_fee=5,
+        )
 
         borrowings = Borrowing.objects.create(
             borrowing_date=date(2022, 1, 1),
-            expected_date=date(2022,10,10),
-            actual_return=date(2022,10,11),
+            expected_date=date(2022, 10, 10),
+            actual_return=date(2022, 10, 11),
             book_id=book,
-            user_id=user
+            user_id=user,
         )
-        expected_borrowings = f"{borrowings.borrowing_date} - {borrowings.actual_return}"
+        expected_borrowings = (
+            f"{borrowings.borrowing_date} - {borrowings.actual_return}"
+        )
         self.assertEqual(str(borrowings), expected_borrowings)
 
 
@@ -69,8 +77,13 @@ class TestPaymentModel(TestCase):
             borrowing_id=borrowing,
             session_url="http://example.com",
             session_id="test_session_id",
-            money_to_pay=10
+            money_to_pay=10,
         )
 
-        expected_borrowings = f"payment: {payment.status}, {payment.type}, {payment.borrowing_id}"
+        expected_borrowings = (
+            f"payment: "
+            f"{payment.status},"
+            f"{payment.type}, "
+            f"{payment.borrowing_id}"
+        )
         self.assertEqual(str(payment), expected_borrowings)

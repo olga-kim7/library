@@ -11,7 +11,7 @@ class TestUserModel(TestCase):
 
     def test_create_user_with_username(self):
         user = {
-            'username': 'test_test',
+            "username": "test_test",
             "password": "Test12345",
         }
         response = self.client.post(USER_URL, user)
