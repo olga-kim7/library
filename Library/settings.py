@@ -9,8 +9,13 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+import os
 from datetime import timedelta
 from pathlib import Path
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -28,7 +33,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-DOMAIN_NAME = 'http://127.0.0.1:8000//'
+DOMAIN_NAME = os.environ["DOMAIN_NAME"]
 # Application definition
 
 INSTALLED_APPS = [
@@ -109,6 +114,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "borrowings_service.permissions.IsAdminAllOrIfAuthenticatedReadOnly",
+    ],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.AnonRateThrottle',
@@ -120,7 +128,7 @@ REST_FRAMEWORK = {
     },
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-)
+    )
 }
 
 
@@ -164,18 +172,16 @@ AUTH_USER_MODEL = 'users_service.User'
 
 # celery
 
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
+CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"]
+
 
 # Stripe
 
-STRIPE_PUBLISHABLE_KEY = 'pk_test_51QmdmTP2YJRNJCWKHVU1EEeiPDcjnGzek2Ypi3UfXDGuMDOKqvTsyXpaJOvCvCUU3lCALBOZlFf8EabgyxnXsL4B00UnG7nAqB'
-STRIPE_SECRET_KEY = 'sk_test_51QmdmTP2YJRNJCWKwp68SXjzWL0mvCUVZdM7x5juMWAJJGnNcFZsB9n4ikBfHIU8EBWGhkAyjPYQGvcYJLMkA0p800rmoyM2aB'
-STRIPE_WEBHOOK_SECRET = 'whsec_73bbe35299fdbe6f309ae9c3897cb3337f2d3cc01cb7f56632b104735883c29e'
+STRIPE_PUBLISHABLE_KEY = os.environ["STRIPE_PUBLISHABLE_KEY"]
+STRIPE_SECRET_KEY = os.environ["STRIPE_SECRET_KEY"]
+STRIPE_WEBHOOK_SECRET = os.environ["STRIPE_WEBHOOK_SECRET"]
 
 # Telegram
 
-TELEGRAM_BOT_TOKEN = "8002650392:AAHqZNJJlohRkhfDJLTZtmXoew5eHEDnAec"
-TELEGRAM_CHAT_ID = 544408238
+TELEGRAM_BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
+TELEGRAM_CHAT_ID = os.environ["TELEGRAM_CHAT_ID"]
