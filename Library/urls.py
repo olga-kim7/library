@@ -33,7 +33,6 @@ urlpatterns = [
     ),
     path("api/users/", include("users_service.urls"), name="users_service"),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
-    # Optional UI:
     path(
         "api/schema/swagger/",
         SpectacularSwaggerView.as_view(url_name="schema"),

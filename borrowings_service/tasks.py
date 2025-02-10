@@ -1,5 +1,4 @@
 import os
-import time
 
 import django
 from celery import shared_task
@@ -9,7 +8,6 @@ import logging
 from django.utils import timezone
 
 from django.conf import settings
-from Library.celery import app
 from borrowings_service.models import Borrowing, Payment
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Library.settings")
@@ -26,7 +24,6 @@ TELEGRAM_API_URL = (f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/"
 
 @shared_task
 def send_telegram_message(message: str):
-    """Надсилає повідомлення у Telegram"""
     try:
         response = requests.post(
             TELEGRAM_API_URL,
@@ -56,7 +53,6 @@ def notify_new_borrowing(borrowing_id: int):
 
 @shared_task
 def notify_overdue_borrowings():
-    """Щоденне сповіщення про прострочені книги"""
     today = timezone.now().date()
     overdue_borrowings = Borrowing.objects.filter(
         expected_date__lt=today, actual_return__isnull=True
@@ -77,7 +73,6 @@ def notify_overdue_borrowings():
 
 @shared_task
 def notify_successful_payment(payment_id: int):
-    """Сповіщення про успішну оплату"""
     try:
         payment = Payment.objects.get(id=payment_id)
         message = (

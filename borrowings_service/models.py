@@ -1,10 +1,6 @@
-import uuid
-from datetime import date
-
-import stripe
 from django.conf import settings
 from django.db import models
-from django.shortcuts import redirect
+
 from rest_framework.exceptions import ValidationError
 
 from books_service.models import Book
@@ -51,11 +47,24 @@ class Borrowing(models.Model):
 
 
 class Payment(models.Model):
-    STATUS = [("PENDING", "PENDING"), ("PAID", "PAID")]
-    TYPE = [("PAYMENT", "PAYMENT"), ("FINE", "FINE")]
+    class StatusChoices(models.TextChoices):
+        PENDING = "PENDING", "Pending"
+        PAID = "PAID", "Paid"
 
-    status = models.CharField(max_length=255, choices=STATUS, default="PEC")
-    type = models.CharField(max_length=255, choices=TYPE, default="PC")
+    class TypeChoices(models.TextChoices):
+        PAYMENT = "PAYMENT", "Payment"
+        FINE = "FINE", "Fine"
+
+    status = models.CharField(
+        max_length=10,
+        choices=StatusChoices.choices,
+        default=StatusChoices.PENDING
+    )
+    type = models.CharField(
+        max_length=10,
+        choices=TypeChoices.choices,
+        default=TypeChoices.PAYMENT,
+    )
     borrowing_id = models.ForeignKey(
         Borrowing, on_delete=models.CASCADE, related_name="payments"
     )

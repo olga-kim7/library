@@ -10,8 +10,7 @@ from rest_framework.test import APIClient
 
 from books_service.models import Book
 from borrowings_service.models import Borrowing, Payment
-from borrowings_service.serializers import BorrowingSerializer
-from users_service.models import User
+
 
 BORROWING_URL = reverse("borrowings_service:borrowings-list")
 PAYMENT_LIST = reverse("borrowings_service:payments-list")

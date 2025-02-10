@@ -1,9 +1,7 @@
 from django.conf import settings
-from django.http import JsonResponse
 
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import View
 from rest_framework import viewsets, permissions
 import stripe
 from drf_spectacular.utils import (
