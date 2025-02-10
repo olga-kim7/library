@@ -34,30 +34,10 @@
 - Swagger for documenting all endpoints  
 
 ### **How to Run:**  
-- Copy `.env.sample` to `.env` and populate it with all required data.  
-- Install dependencies:  
-  ```bash
-  pip install -r requirements.txt
-  ```
-- Start the application:  
-  ```bash
-  python manage.py runserver
-  ```
-- Create an admin user:  
-  ```bash
-  python manage.py createsuperuser
-  ```
-- Start Celery for handling background tasks:  
-  ```bash
-  celery -A library worker --loglevel=info
-  ```
+How to Run:
 
-  
-### **API Documentation:**  
-- All endpoints are documented using Swagger.  
-- Swagger documentation can be accessed at:  
-  ```
-  http://localhost:8000/swagger/
-  ```  
+Copy .env.sample to .env and populate it with all required data.
+Run the following command to build and start the application:
+docker-compose up --build
 
-Let me know if you need any changes! 🚀
+Create an admin user and schedule the synchronization of overdue borrowers.
